@@ -1,0 +1,163 @@
+<GuiXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://sir.insidi.at/or/schema/esoui.xsd">
+    <Animations>
+        <AnimationTimeline name="CruxCounter_RotateTextureCW" playbackType="LOOP"
+            loopCount="LOOP_INDEFINITELY">
+            <Animations>
+                <TextureRotateAnimation duration="6000" startRotation="ZO_TWO_PI" endRotation="0" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_RotateTextureCCW" playbackType="LOOP"
+            loopCount="LOOP_INDEFINITELY">
+            <Animations>
+                <TextureRotateAnimation duration="6000" startRotation="0" endRotation="-ZO_TWO_PI" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_RotateControlCCW" playbackType="LOOP"
+            loopCount="LOOP_INDEFINITELY">
+            <Animations>
+                <TransformRotationAnimation duration="6000" startZ="0" endZ="ZO_TWO_PI" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_RotateControlCW" playbackType="LOOP"
+            loopCount="LOOP_INDEFINITELY">
+            <Animations>
+                <TransformRotationAnimation duration="6000" startZ="ZO_TWO_PI" endZ="0" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_RotateBG" playbackType="LOOP"
+            loopCount="LOOP_INDEFINITELY">
+            <Animations>
+                <TransformRotationAnimation duration="25000" startZ="ZO_TWO_PI" endZ="0" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_CruxFadeIn">
+            <Animations>
+                <AlphaAnimation duration="150" startAlpha="0.0" endAlpha="1.0" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_CruxFadeOut">
+            <Animations>
+                <AlphaAnimation duration="150" startAlpha="1.0" endAlpha="0.0" />
+            </Animations>
+        </AnimationTimeline>
+        <AnimationTimeline name="CruxCounter_CruxSmokeDontBreatheThis" playbackType="LOOP"
+            loopCount="LOOP_INDEFINITELY">
+            <Animations>
+                <TextureAnimation cellsHigh="6" cellsWide="6" framerate="30" />
+            </Animations>
+        </AnimationTimeline>
+    </Animations>
+
+    <Controls>
+        <Texture
+            name="CruxCounter_AuraRune"
+            virtual="true"
+            textureFile="/art/fx/texture/arcanist_trianglerune_01.dds"
+            inheritScale="true"
+            inheritAlpha="true"
+            color="B7FF7C"
+            blendMode="ALPHA"
+        >
+            <Dimensions x="32" y="32" />
+        </Texture>
+        <Control name="CruxCounter_Crux" virtual="true" alpha="0.0">
+            <Dimensions x="64" y="64" />
+            <Controls>
+                <Texture
+                    name="$(parent)Glow"
+                    textureFile="/art/fx/texture/lensflares_02_2x2.dds"
+                    inheritScale="true"
+                    inheritAlpha="true"
+                    color="B7FF7C"
+                    blendMode="ALPHA"
+                >
+                    <Dimensions x="64" y="64" />
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetY="0" offsetX="0" />
+                    <TextureCoords left="0" right="0.5" top="0" bottom="0.5" />
+                </Texture>
+                <Texture
+                    name="$(parent)Smoke"
+                    textureFile="/art/fx/texture/smoke_billowy_6x6.dds"
+                    inheritScale="true"
+                    inheritAlpha="true"
+                    color="B7FF7C"
+                    blendMode="ALPHA"
+                >
+                    <Dimensions x="64" y="64" />
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetY="0" offsetX="0" />
+                </Texture>
+                <Texture name="$(parent)Rune" inherits="CruxCounter_AuraRune">
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetY="0" offsetX="0" />
+                </Texture>
+            </Controls>
+        </Control>
+        <TopLevelControl
+            name="CruxCounter_Aura"
+            movable="true"
+            mouseEnabled="true"
+            hidden="true"
+            clampedToScreen="false"
+        >
+            <Dimensions x="128" y="128" />
+            <Anchor
+                point="CENTER"
+                relativeTo="GuiRoot"
+                relativePoint="CENTER"
+                offsetY="0"
+                offsetX="0"
+            />
+            <Controls>
+                <Control name="$(parent)Orbit">
+                    <Controls>
+                        <Control name="$(parent)Crux1" inherits="CruxCounter_Crux" />
+                        <Control name="$(parent)Crux2" inherits="CruxCounter_Crux" />
+                        <Control name="$(parent)Crux3" inherits="CruxCounter_Crux" />
+                    </Controls>
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetX="0" offsetY="0" />
+                </Control>
+
+                <Texture
+                    name="$(parent)Shadow"
+                    textureFile="/art/fx/texture/lensflares_02_2x2.dds"
+                    inheritScale="true"
+                    inheritAlpha="true"
+                    color="121212"
+                    blendMode="ALPHA"
+                    alpha="0.05"
+                >
+                    <Dimensions x="128" y="128" />
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetX="0" offsetY="0" />
+                    <TextureCoords left="0" right="0.5" top="0" bottom="0.5" />
+                </Texture>
+
+                <Texture
+                    name="$(parent)BG"
+                    textureFile="/art/fx/texture/arcanist_tank4_runicglowlines.dds"
+                    inheritScale="true"
+                    inheritAlpha="true"
+                    color="ADF573"
+                    blendMode="ALPHA"
+                >
+                    <Dimensions x="128" y="128" />
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetX="0" offsetY="0" />
+                </Texture>
+
+                <Label
+                    name="$(parent)Count"
+                    font="$(ANTIQUE_FONT)|$(KB_26)|soft-shadow-thin"
+                    inheritScale="true"
+                    inheritAlpha="true"
+                    horizontalAlignment="CENTER"
+                    verticalAlignment="CENTER"
+                    color="B7FFC6"
+                    text="0"
+                >
+                    <Dimensions x="64" y="64" />
+                    <Anchor point="CENTER" relativeTo="$(parent)" offsetX="0" offsetY="0" />
+                </Label>
+            </Controls>
+        </TopLevelControl>
+    </Controls>
+</GuiXml>
+

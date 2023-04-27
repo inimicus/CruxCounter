@@ -1,0 +1,27 @@
+## Title: Crux Counter
+## APIVersion: 101038
+## SavedVariables: CruxCounterData
+## Description: Got Crux?
+## Version: 0.0.1
+## AddOnVersion: 000001
+## Author: |cFFCCCC@g4rr3t|r (NA)
+## DependsOn: LibAddonMenu-2.0>=28
+
+src/Addon.lua
+src/Debug.lua
+src/Callbacks.lua
+
+src/lang/en.lua
+src/lang/$(language).lua
+src/Language.lua
+
+CruxCounter.xml
+src/Settings.lua
+src/Interface.lua
+src/State.lua
+src/Events.lua
+src/Init.lua
+
+; Configuration for makePackage.sh
+; See github.com/inimicus/makePackage for more information
+; PackageBumpFiles: src/Addon.lua
