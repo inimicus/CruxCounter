@@ -10,8 +10,7 @@ local CC = CruxCounter or {}
 function M.Setup()
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_LOCK", "Заблокировать")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_UNLOCK", "Разблокировать")
-    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_LOCK_DESC",
-        "Переключение состояния блокировки/разблокировки отображения счетчика для переноски.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_LOCK_DESC", "Вкл/выкл возможность перемещения счётчика.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_DISPLAY_HEADER", "Отображение")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_LOCK_TO_RETICLE_WARNING",
