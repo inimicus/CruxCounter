@@ -15,6 +15,7 @@ Count and show active Crux.
 [*]German (de)
 [*]English (en)
 [*]Spanish (es)
+[*]French (fr)
 [/LIST]
 [/LIST]
 
