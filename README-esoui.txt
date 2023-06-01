@@ -18,6 +18,7 @@ Count and show active Crux.
 [*]French (fr)
 [*]Japanese (jp)
 [*]Russian (ru)
+[*]Chinese (zh)
 [/LIST]
 [/LIST]
 
