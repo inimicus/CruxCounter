@@ -13,6 +13,7 @@ Count and show active Crux.
 - Includes translations for:
   - German (de)
   - English (en)
+  - Spanish (es)
 
 Counter:
 
