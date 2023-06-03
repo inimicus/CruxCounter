@@ -50,7 +50,7 @@ function M.Setup()
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_ROTATE",
         "Drehen der Textur des Zählerhintergrunds ein- oder ausschalten.")
 
-    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "Sounds")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "Geräusche")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_PLAY", "Wiedergeben")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_CRUX_GAINED", "Crux erlangt")
