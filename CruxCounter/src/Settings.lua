@@ -109,19 +109,19 @@ local function setLocked(isLocked)
 end
 
 --- Get the locked state of the counter
---- @return boolean True when the counter is locked
+--- @return boolean isLocked True when the counter is locked
 local function getLocked()
     return M.settings.locked
 end
 
 --- Get the lock to reticle state
---- @return boolean True when counter is locked to the reticle
+--- @return boolean isLocked True when counter is locked to the reticle
 local function getLockToReticle()
     return M.settings.lockToReticle
 end
 
 --- Get the translated locked/unlocked string
---- @return string Translated Lock/Unlock text
+--- @return string buttonText Translated Lock/Unlock text
 local function getLockUnlockButtonText()
     if getLocked() or getLockToReticle() then
         return lang:GetString("SETTINGS_UNLOCK")
@@ -130,6 +130,8 @@ local function getLockUnlockButtonText()
     end
 end
 
+--- Get the translated lock tooltip based on if lock to reticle is enabled
+--- @return string tooltipText Translated lock button tooltip or lock to reticle warning
 local function getLockUnlockTooltipText()
     if getLockToReticle() then
         return lang:GetString("SETTINGS_LOCK_TO_RETICLE_WARNING")
@@ -138,6 +140,8 @@ local function getLockUnlockTooltipText()
     end
 end
 
+--- Get the translated move to center tooltip based on if lock to reticle is enabled
+--- @return string tooltipText Translated move to center button tooltip or lock to reticle warning
 local function getMoveToCenterTooltipText()
     if getLockToReticle() then
         return lang:GetString("SETTINGS_LOCK_TO_RETICLE_WARNING")
@@ -207,7 +211,7 @@ local function setSize(value)
 end
 
 --- Get the counter display size
---- @return number Counter display size
+--- @return number size Counter display size
 local function getSize()
     return M.settings.size
 end
