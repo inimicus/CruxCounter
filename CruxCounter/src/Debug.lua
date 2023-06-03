@@ -11,7 +11,7 @@ local addon = CC.Addon
 --                1: Low    - Basic debug info, show core functionality
 --                2: Medium - More information about skills and addon details
 --                3: High   - Everything
-M.level     = 1
+M.level     = 0
 
 --- Write a message to game chat
 --- @param ... any Message to output
