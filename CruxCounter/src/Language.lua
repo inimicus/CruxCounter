@@ -3,7 +3,7 @@
 -- -----------------------------------------------------------------------------
 
 local M = {}
-local CC = CruxCounter or {}
+local CC = CruxCounter
 local translation = CC.Translation
 
 M.translationPrefix = "CRUX_COUNTER_"

@@ -3,7 +3,7 @@
 -- -----------------------------------------------------------------------------
 
 local M = {}
-local CC = CruxCounter or {}
+local CC = CruxCounter
 
 --- Setup translation strings
 --- @return nil
@@ -59,7 +59,7 @@ function M.Setup()
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_MAXIMUM_CRUX", "Interprétations maximales")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_MAXIMUM_CRUX_DESC",
-    "Jouer un son lorsqu'on atteint le maximum d'Interprétation.")
+        "Jouer un son lorsqu'on atteint le maximum d'Interprétation.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_CRUX_LOST", "Perte d'Interprétation")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_CRUX_LOST_DESC", "Jouer un son lorsqu'on perd de l'Interprétation.")
