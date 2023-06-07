@@ -74,11 +74,10 @@ local function initCrux(num)
         control          = control,
         startingRotation = 360 - (360 / num),
         timelines        = {
-            fadeIn   = AM:CreateTimelineFromVirtual("CruxCounter_CruxFadeIn", control),
-            fadeOut  = AM:CreateTimelineFromVirtual("CruxCounter_CruxFadeOut", control),
-            smoke    = AM:CreateTimelineFromVirtual("CruxCounter_CruxSmokeDontBreatheThis",
-                control:GetNamedChild("Smoke")),
-            rotation = AM:CreateTimelineFromVirtual("CruxCounter_RotateControlCW", control)
+            fadeIn   = AM:CreateTimelineFromVirtual(animations.cruxFadeIn, control),
+            fadeOut  = AM:CreateTimelineFromVirtual(animations.cruxFadeOut, control),
+            smoke    = AM:CreateTimelineFromVirtual(animations.cruxSmoke, control:GetNamedChild("Smoke")),
+            rotation = AM:CreateTimelineFromVirtual(animations.rotateControlCW, control)
         },
     }
 
@@ -323,7 +322,7 @@ function M:Setup()
     setHandlers()
 
     -- Create default animations
-    M.orbit = AM:CreateTimelineFromVirtual(animations.rotateControlCCW, orbit)
+    self.orbit = AM:CreateTimelineFromVirtual(animations.rotateControlCCW, orbit)
     M.background = AM:CreateTimelineFromVirtual(animations.rotateBG, aura:GetNamedChild("BG"))
 
     local settingsNumber = s.settings.elements.number
@@ -365,7 +364,11 @@ function M.UpdateStacks(stackCount)
     -- Fade out all
     if stackCount == 0 then
         for _, rune in ipairs(M.runes) do
-            rune.timelines.fadeOut:PlayFromStart()
+            if rune.isShowing() then
+                rune.timelines.fadeOut:PlayFromStart()
+            else
+                rune.timelines.fadeOut:PlayInstantlyToEnd()
+            end
         end
 
         return
