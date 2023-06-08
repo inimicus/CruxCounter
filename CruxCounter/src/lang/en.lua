@@ -45,6 +45,9 @@ function M.Setup()
         "Show or hide display of the counter background texture.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_ROTATE",
         "Turn on or off rotation of the counter background texture.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX", "Hide Without Crux")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC",
+    "Hide background when there are no Crux active.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "Sounds")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_PLAY", "Play")

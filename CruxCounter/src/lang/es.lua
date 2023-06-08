@@ -48,6 +48,9 @@ function M.Setup()
         "Mostrar u ocultar la textura de fondo del contador.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_ROTATE",
         "Activar o desactivar la rotación de la textura de fondo del contador.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX", "Ocultar sin Eje")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC",
+        "Oculta el fondo cuando no hay Ejes activos.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "Sonidos")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_PLAY", "Reproducir")

@@ -40,6 +40,8 @@ function M.Setup()
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND", "背景")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_DESC", "カウンターの背景テクスチャの表示を表示または非表示にします。")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_ROTATE", "カウンターの背景テクスチャの回転をオンまたはオフにします。")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX", "ゼロクラックス非表示")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC", "クラックスが存在しない場合に背景を非表示にします。")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "サウンド")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_PLAY", "再生")

@@ -49,6 +49,9 @@ function M.Setup()
         "Anzeige der Textur des Zählerhintergrunds ein- oder ausblenden.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_ROTATE",
         "Drehen der Textur des Zählerhintergrunds ein- oder ausschalten.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX", "Verstecken ohne Crux")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC",
+        "Versteckt den Hintergrund, wenn keine Crux aktiv sind.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "Geräusche")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_PLAY", "Wiedergeben")

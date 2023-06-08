@@ -9,6 +9,7 @@ local CC          = CruxCounter
 
 local db
 local s
+local state
 
 -- -----------------------------------------------------------------------------
 -- Local XML Globals
@@ -56,6 +57,8 @@ function M:AddSceneFragments()
     HUD_SCENE:AddFragment(fragment)
 end
 
+--- Remove fragments from scenes
+--- @return nil
 function M:RemoveSceneFragments()
     HUD_UI_SCENE:RemoveFragment(fragment)
     HUD_SCENE:RemoveFragment(fragment)
@@ -170,7 +173,23 @@ end
 --- @param show boolean True to show the background element
 --- @return nil
 function M:ShowBackground(show)
-    aura:GetNamedChild("BG"):SetHidden(not show)
+    local bg = aura:GetNamedChild("BG")
+    local hidden = bg:GetAlpha() == 0 or bg:IsHidden()
+    local animation
+
+    if show then
+        animation = "fadeIn"
+    else
+        animation = "fadeOut"
+    end
+
+    -- Skip animation when already in preferred state
+    -- Play instantly to ensure a known playback position
+    if (not show and hidden) or (show and not hidden) then
+        self.background.timelines[animation]:PlayInstantlyToEnd()
+    else
+        self.background.timelines[animation]:PlayFromStart()
+    end
 end
 
 --- Set if the rune elements should rotate
@@ -228,13 +247,13 @@ end
 --- Start the background animation
 --- @return nil
 function M:StartBackground()
-    self.background:PlayFromStart(0)
+    self.background.timelines.rotate:PlayFromStart(0)
 end
 
 --- Stop the background animation
 --- @return nil
 function M:StopBackground()
-    self.background:Stop()
+    self.background.timelines.rotate:Stop()
 end
 
 --- Stop the counter position
@@ -311,6 +330,7 @@ end
 function M:Setup()
     db = CC.Debug
     s = CC.Settings
+    state = CC.State
 
     -- Setup Crux runes
     local numCrux = orbit:GetNumChildren();
@@ -318,51 +338,67 @@ function M:Setup()
         initCrux(i)
     end
 
-    M:SetPosition(s.settings.top, s.settings.left)
+    self:SetPosition(s.settings.top, s.settings.left)
     setHandlers()
 
     -- Create default animations
     self.orbit = AM:CreateTimelineFromVirtual(animations.rotateControlCCW, orbit)
-    M.background = AM:CreateTimelineFromVirtual(animations.rotateBG, aura:GetNamedChild("BG"))
+    self.background.timelines = {
+        rotate = AM:CreateTimelineFromVirtual(animations.rotateBG, aura:GetNamedChild("BG")),
+        fadeIn = AM:CreateTimelineFromVirtual(animations.cruxFadeIn, aura:GetNamedChild("BG")),
+        fadeOut = AM:CreateTimelineFromVirtual(animations.cruxFadeOut, aura:GetNamedChild("BG")),
+    }
 
     local settingsNumber = s.settings.elements.number
     local settingsRunes = s.settings.elements.runes
     local settingsBackground = s.settings.elements.background
     local hideOutOfCombat = s.settings.hideOutOfCombat
 
-    if settingsRunes.enabled and settingsRunes.rotate then
-        M:StartOrbit()
-    end
-
-    if settingsBackground.enabled and settingsBackground.rotate then
-        M:StartBackground()
-    end
-
     self:SetLocked(s.settings.locked)
     self:SetSize(s.settings.size)
     self:ShowNumber(settingsNumber.enabled)
     self:ShowRunes(settingsRunes.enabled)
-    self:ShowBackground(settingsBackground.enabled)
+
+    if settingsBackground.enabled then
+        if settingsBackground.hideZeroStacks then
+            self:ShowBackground(state.stacks > 0)
+        else
+            self:ShowBackground(true)
+        end
+    else
+        self:ShowBackground(false)
+    end
+
+    if settingsRunes.enabled and settingsRunes.rotate then
+        self:StartOrbit()
+    end
+
+    if settingsBackground.enabled and settingsBackground.rotate then
+        self:StartBackground()
+    end
 
     if not hideOutOfCombat then
         self:Unhide()
         self:AddSceneFragments()
     end
+
+    self:RefreshUI()
 end
 
 --- Perform update to the UI when stacks change
 --- @param stackCount number Number of Crux currently active
 --- @return nil
 function M.UpdateStacks(stackCount)
-    -- Skip updates if stacks are the same
-    if count:GetText() == tostring(stackCount) then
-        return
-    end
-
+    local settingsBackground = s.settings.elements.background
     count:SetText(stackCount)
 
     -- Fade out all
     if stackCount == 0 then
+        if settingsBackground.hideZeroStacks and settingsBackground.enabled then
+            db:Trace(3, "Zero stacks, hiding background")
+            M:ShowBackground(false)
+        end
+
         for _, rune in ipairs(M.runes) do
             if rune.isShowing() then
                 rune.timelines.fadeOut:PlayFromStart()
@@ -372,6 +408,10 @@ function M.UpdateStacks(stackCount)
         end
 
         return
+    end
+
+    if settingsBackground.hideZeroStacks and settingsBackground.enabled then
+        M:ShowBackground(true)
     end
 
     -- Make sure to show as many as there are stacks
@@ -385,6 +425,12 @@ function M.UpdateStacks(stackCount)
     if stackCount == 3 then
         M.runes[2].timelines.swoop:PlayFromStart()
     end
+end
+
+--- Refresh the UI state based on the current number of stacks
+--- @return nil
+function M:RefreshUI()
+    self.UpdateStacks(state.stacks)
 end
 
 CC.UI = M
