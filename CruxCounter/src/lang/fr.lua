@@ -49,6 +49,9 @@ function M.Setup()
         "Afficher ou masquer l'affichage de la texture de fond du compteur.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_ROTATE",
         "Activer ou désactiver la rotation de la texture de fond du compteur.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX", "Masquer sans Interprétation")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC",
+        "Masquer l'arrière-plan lorsqu'il n'y a pas d'Interprétation active.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_HEADER", "Sons")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_SOUNDS_PLAY", "Jouer")

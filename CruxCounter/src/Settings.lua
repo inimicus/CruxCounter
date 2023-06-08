@@ -34,8 +34,9 @@ M.defaults       = {
             rotate  = true,
         },
         background = {
-            enabled = true,
-            rotate  = true,
+            enabled        = true,
+            rotate         = true,
+            hideZeroStacks = false,
         },
     },
     sounds          = {
@@ -288,8 +289,10 @@ local displayOptions = {
 local function setElementEnabled(element, enabled)
     if element == "background" then
         ui:ShowBackground(enabled)
+        ui:RotateBackground(M.settings.elements.background.rotate)
     elseif element == "runes" then
         ui:ShowRunes(enabled)
+        ui:RotateRunes(M.settings.elements.runes.rotate)
     elseif element == "number" then
         ui:ShowNumber(enabled)
     else
@@ -330,6 +333,25 @@ end
 --- @return boolean rotate True if the element rotation is enabled
 local function getElementRotate(element)
     return M.settings.elements[element].rotate
+end
+
+--- Get the Hide for No Crux setting
+--- @return boolean hideZeroStacks True to hide when there are zero stacks
+local function getBackgroundHideZeroStacks()
+    return M.settings.elements.background.hideZeroStacks
+end
+
+--- Set the Hide for No Crux setting
+--- @param hideZeroStacks boolean True to hide when there are no stacks
+--- @return nil
+local function setBackgroundHideZeroStacks(hideZeroStacks)
+    M.settings.elements.background.hideZeroStacks = hideZeroStacks
+
+    if hideZeroStacks then
+        ui:RefreshUI()
+    else
+        ui:ShowBackground(M.settings.elements.background.enabled)
+    end
 end
 
 --- @type table Options for Style settings
@@ -433,6 +455,22 @@ local styleOptions = {
         setFunc = function(enabled)
             setElementRotate("background", enabled)
         end,
+        width = "half",
+        disabled = function()
+            return not getElementEnabled("background")
+        end,
+    },
+    {
+        -- Hide on Zero Stacks
+        type = "checkbox",
+        name = function()
+            return lang:GetString("SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX")
+        end,
+        tooltip = function()
+            return lang:GetString("SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC")
+        end,
+        getFunc = getBackgroundHideZeroStacks,
+        setFunc = setBackgroundHideZeroStacks,
         width = "half",
         disabled = function()
             return not getElementEnabled("background")
