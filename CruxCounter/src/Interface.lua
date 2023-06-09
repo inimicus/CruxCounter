@@ -37,9 +37,6 @@ local animations  = {
 --- @type number Distance from center of rotation
 local orbitRadius = 32
 
---- @type table|nil Scene fragment
-local fragment
-
 --- Set the rotation around the orbit
 --- @param control any Degrees of rotation
 --- @param degrees number Degrees of rotation
@@ -47,21 +44,6 @@ local fragment
 local function setRuneRotation2D(control, degrees)
     local x, y = ZO_Rotate2D(math.rad(degrees), 0, orbitRadius)
     control:SetAnchor(CENTER, orbit, CENTER, x, y)
-end
-
---- Setup scenes the addon should appear
---- @return nil
-function M:AddSceneFragments()
-    fragment = ZO_SimpleSceneFragment:New(aura)
-    HUD_UI_SCENE:AddFragment(fragment)
-    HUD_SCENE:AddFragment(fragment)
-end
-
---- Remove fragments from scenes
---- @return nil
-function M:RemoveSceneFragments()
-    HUD_UI_SCENE:RemoveFragment(fragment)
-    HUD_SCENE:RemoveFragment(fragment)
 end
 
 --- Initialize Crux runes and associated functionality
@@ -154,6 +136,31 @@ end
 M.runes      = {}
 M.orbit      = {}
 M.background = {}
+
+--- @type table|nil Scene fragment
+M.fragment   = nil
+
+--- Setup scenes the addon should appear
+--- @return nil
+function M:AddSceneFragments()
+    if self.fragment ~= nil then return end
+
+    self.fragment = ZO_SimpleSceneFragment:New(aura)
+
+    HUD_UI_SCENE:AddFragment(self.fragment)
+    HUD_SCENE:AddFragment(self.fragment)
+end
+
+--- Remove fragments from scenes
+--- @return nil
+function M:RemoveSceneFragments()
+    if self.fragment == nil then return end
+
+    HUD_UI_SCENE:RemoveFragment(self.fragment)
+    HUD_SCENE:RemoveFragment(self.fragment)
+
+    self.fragment = nil
+end
 
 --- Set if the number element should display
 --- @param show boolean True to show number
