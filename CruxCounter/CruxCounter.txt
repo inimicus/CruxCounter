@@ -1,5 +1,5 @@
 ## Title: Crux Counter
-## APIVersion: 101038
+## APIVersion: 101038 101039
 ## SavedVariables: CruxCounterData
 ## Description: Got Crux?
 ## Version: 1.2.0
@@ -15,9 +15,15 @@ src/lang/en.lua
 src/lang/$(language).lua
 src/Language.lua
 
-CruxCounter.xml
 src/Settings.lua
 src/Interface.lua
 src/State.lua
 src/Events.lua
 src/Init.lua
+
+src/elements/Ring.lua
+src/elements/Rune.lua
+src/elements/Orbit.lua
+src/elements/Aura.lua
+
+CruxCounter.xml

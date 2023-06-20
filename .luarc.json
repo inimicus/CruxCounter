@@ -11,6 +11,7 @@
     "HUD_SCENE",
     "HUD_UI_SCENE",
     "WINDOW_MANAGER",
-    "ZO_CreateStringId"
+    "ZO_CreateStringId",
+    "ZO_InitializingObject"
   ]
 }
