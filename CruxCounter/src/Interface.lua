@@ -2,126 +2,14 @@
 -- Interface.lua
 -- -----------------------------------------------------------------------------
 
-local M            = {}
-local AM           = ANIMATION_MANAGER
-local WM           = WINDOW_MANAGER
-local CC           = CruxCounter
+local M      = {}
+local AM     = ANIMATION_MANAGER
+local WM     = WINDOW_MANAGER
+local CC     = CruxCounter
 
 local db
 local s
 local state
-
--- -----------------------------------------------------------------------------
--- Local XML Globals
--- Update globals in .luarc.json
--- -----------------------------------------------------------------------------
-
-local auraControl  = CruxCounter_Aura
-local orbitControl = CruxCounter_AuraOrbit
-local countControl = CruxCounter_AuraCount
-
---- @type table Shorthand animation names
-local animations   = {
-    cruxFadeIn       = "CruxCounter_CruxFadeIn",
-    cruxFadeOut      = "CruxCounter_CruxFadeOut",
-    cruxSmoke        = "CruxCounter_CruxSmokeDontBreatheThis",
-    rotateControlCCW = "CruxCounter_RotateControlCCW",
-    rotateControlCW  = "CruxCounter_RotateControlCW",
-    rotateBG         = "CruxCounter_RotateBG",
-}
-
--- -----------------------------------------------------------------------------
--- Defaults
--- -----------------------------------------------------------------------------
-
---- @type number Distance from center of rotation
-local orbitRadius  = 32
-
---- Set the rotation around the orbit
---- @param control any Degrees of rotation
---- @param degrees number Degrees of rotation
---- @return nil
-local function setRuneRotation2D(control, degrees)
-    local x, y = ZO_Rotate2D(math.rad(degrees), 0, orbitRadius)
-    control:SetAnchor(CENTER, orbitControl, CENTER, x, y)
-end
-
---- Initialize Crux runes and associated functionality
---- @param num integer Index of the rune to init
---- @return nil
-local function initCrux(num)
-    local control = orbitControl:GetNamedChild("Crux" .. num)
-
-    local rune = {
-        isShowing        = function()
-            return control:GetAlpha() == 1
-        end,
-        control          = control,
-        startingRotation = 360 - (360 / num),
-        timelines        = {
-            fadeIn   = AM:CreateTimelineFromVirtual(animations.cruxFadeIn, control),
-            fadeOut  = AM:CreateTimelineFromVirtual(animations.cruxFadeOut, control),
-            smoke    = AM:CreateTimelineFromVirtual(animations.cruxSmoke, control:GetNamedChild("Smoke")),
-            rotation = AM:CreateTimelineFromVirtual(animations.rotateControlCW, control)
-        },
-    }
-
-    setRuneRotation2D(control, rune.startingRotation)
-
-    local swoopAnimation, swoopTimeline = CreateSimpleAnimation(ANIMATION_CUSTOM, control)
-    if swoopAnimation and swoopTimeline then
-        swoopAnimation:SetEasingFunction(ZO_EaseOutQuadratic)
-        swoopAnimation:SetUpdateFunction(function(_, progress)
-            local rotation = rune.startingRotation - 60 * progress
-            setRuneRotation2D(control, rotation)
-        end)
-        swoopAnimation:SetDuration(250)
-    end
-
-    rune.timelines.swoop = swoopTimeline
-
-    rune.timelines.fadeOut:SetHandler("OnStop", function()
-        setRuneRotation2D(control, rune.startingRotation)
-    end)
-
-    rune.timelines.smoke:PlayFromStart()
-
-    M.runes[num] = rune
-end
-
---- When moving/movable, show the move (pan) cursor
---- @param moving boolean Is the counter moving/able to be moved?
---- @return nil
-local function showMoveCursor(moving)
-    if s.settings.locked then
-        return
-    end
-
-    if moving then
-        WM:SetMouseCursor(MOUSE_CURSOR_PAN)
-    else
-        WM:SetMouseCursor(MOUSE_CURSOR_DO_NOT_CARE)
-    end
-end
-
---- Setup move/drag handlers
---- @return nil
-local function setHandlers()
-    -- Update cursor when unlocked
-    auraControl:SetHandler("OnMouseEnter", function()
-        showMoveCursor(true)
-    end)
-    auraControl:SetHandler("OnMouseExit", function()
-        showMoveCursor(false)
-    end)
-    aura:SetHandler("OnMoveStop", function(control)
-        db:Trace(3, "OnMoveStop")
-        local centerX, centerY = control:GetCenter()
-        local parentCenterX, parentCenterY = control:GetParent():GetCenter()
-        local top, left = centerY - parentCenterY, centerX - parentCenterX
-        s:SavePosition(top, left)
-    end)
-end
 
 -- -----------------------------------------------------------------------------
 -- Module
@@ -130,31 +18,6 @@ end
 M.runes      = {}
 M.orbit      = {}
 M.background = {}
-
---- @type table|nil Scene fragment
-M.fragment   = nil
-
---- Setup scenes the addon should appear
---- @return nil
-function M:AddSceneFragments()
-    if self.fragment ~= nil then return end
-
-    self.fragment = ZO_SimpleSceneFragment:New(auraControl)
-
-    HUD_UI_SCENE:AddFragment(self.fragment)
-    HUD_SCENE:AddFragment(self.fragment)
-end
-
---- Remove fragments from scenes
---- @return nil
-function M:RemoveSceneFragments()
-    if self.fragment == nil then return end
-
-    HUD_UI_SCENE:RemoveFragment(self.fragment)
-    HUD_SCENE:RemoveFragment(self.fragment)
-
-    self.fragment = nil
-end
 
 --- Set if the number element should display
 --- @param show boolean True to show number
@@ -213,14 +76,6 @@ function M:RotateBackground(rotate)
     else
         self:StopBackground()
     end
-end
-
---- Set if the counter is locked
---- @param isLocked boolean True to lock the counter
---- @return nil
-function M:SetLocked(isLocked)
-    db:Trace(2, "Setting movable <<1>>", isLocked)
-    auraControl:SetMovable(not isLocked)
 end
 
 --- Start the orbit animation
@@ -335,29 +190,13 @@ function M:Setup()
     s = CC.Settings
     state = CC.State
 
-    -- Setup Crux runes
-    local numCrux = orbitControl:GetNumChildren();
-    for i = 1, numCrux, 1 do
-        initCrux(i)
-    end
-
     self:SetPosition(s.settings.top, s.settings.left)
-    setHandlers()
-
-    -- Create default animations
-    self.orbit = AM:CreateTimelineFromVirtual(animations.rotateControlCCW, orbitControl)
-    self.background.timelines = {
-        rotate = AM:CreateTimelineFromVirtual(animations.rotateBG, auraControl:GetNamedChild("BG")),
-        fadeIn = AM:CreateTimelineFromVirtual(animations.cruxFadeIn, auraControl:GetNamedChild("BG")),
-        fadeOut = AM:CreateTimelineFromVirtual(animations.cruxFadeOut, auraControl:GetNamedChild("BG")),
-    }
 
     local settingsNumber = s.settings.elements.number
     local settingsRunes = s.settings.elements.runes
     local settingsBackground = s.settings.elements.background
     local hideOutOfCombat = s.settings.hideOutOfCombat
 
-    self.orbit:GetFirstAnimation():SetDuration(settingsRunes.rotationSpeed)
     self:SetLocked(s.settings.locked)
     self:SetSize(s.settings.size)
     self:ShowNumber(settingsNumber.enabled)

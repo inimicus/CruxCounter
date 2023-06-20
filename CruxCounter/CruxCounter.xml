@@ -99,6 +99,25 @@
             hidden="true"
             clampedToScreen="false"
         >
+            <OnInitialized>
+                CruxCounter_Aura_OnInitialized(self)
+            </OnInitialized>
+            <OnEffectivelyHidden>
+                CruxCounter_Aura_OnHidden(self)
+            </OnEffectivelyHidden>
+            <OnEffectivelyShown>
+                CruxCounter_Aura_OnShow(self)
+            </OnEffectivelyShown>
+            <OnMoveStop>
+                CruxCounter_Aura_OnMoveStop(self)
+            </OnMoveStop>
+            <OnMouseEnter>
+                CruxCounter_Aura_OnMouseEnter(self)
+            </OnMouseEnter>
+            <OnMouseExit>
+                CruxCounter_Aura_OnMouseExit(self)
+            </OnMouseExit>
+
             <Dimensions x="128" y="128" />
             <Anchor
                 point="CENTER"

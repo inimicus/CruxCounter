@@ -825,9 +825,10 @@ function M:Setup()
     events        = CC.Events
     lang          = CC.Language
     ui            = CC.UI
-    ui            = CC.UI
 
     self.settings = ZO_SavedVars:NewAccountWide(self.savedVariables, self.dbVersion, nil, self.defaults)
+
+    CruxCounter_Aura:ApplySettings(self.settings)
 
     populateSounds()
 
