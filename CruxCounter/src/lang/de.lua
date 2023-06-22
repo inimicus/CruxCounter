@@ -43,6 +43,9 @@ function M.Setup()
         "Anzeige der Crux-Runentexturen ein- oder ausblenden.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATE_DESC",
         "Drehen der Crux-Runentexturen ein- oder ausschalten.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED", "Geschwindigkeit")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED_DESC",
+        "Geschwindigkeit, mit der sich die Crux-Rune-Texturen drehen. Höher bedeutet schneller.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND", "Hintergrund")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_DESC",

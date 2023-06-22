@@ -43,6 +43,9 @@ function M.Setup()
         "Afficher ou masquer l'affichage des textures de Rune d'Interprétation.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATE_DESC",
         "Activer ou désactiver la rotation des textures de Rune d'Interprétation.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED", "Vitesse")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED_DESC",
+        "Vitesse de rotation des textures des Interprétations. Plus la valeur est élevée, plus la rotation est rapide.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND", "Fond")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_DESC",
