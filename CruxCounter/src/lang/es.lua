@@ -42,6 +42,9 @@ function M.Setup()
         "Mostrar u ocultar las texturas de las runas de Eje.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATE_DESC",
         "Activar o desactivar la rotación de las texturas de las runas de Eje.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED", "Velocidad")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED_DESC",
+        "Velocidad de rotación de las texturas de los Ejes. A mayor valor, mayor velocidad.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND", "Fondo")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_DESC",
