@@ -2,9 +2,9 @@
 -- Settings.lua
 -- -----------------------------------------------------------------------------
 
-local M          = {}
-local CC         = CruxCounter
-local LAM        = LibAddonMenu2
+local M                   = {}
+local CC                  = CruxCounter
+local LAM                 = LibAddonMenu2
 
 local addon
 local db
@@ -12,13 +12,15 @@ local events
 local lang
 local ui
 
-local gameSounds = SOUNDS
-local sounds     = {}
+local gameSounds          = SOUNDS
+local sounds              = {}
 
-M.settings       = {}
-M.dbVersion      = 0
-M.savedVariables = "CruxCounterData"
-M.defaults       = {
+local rotationSpeedFactor = 24000
+
+M.settings                = {}
+M.dbVersion               = 0
+M.savedVariables          = "CruxCounterData"
+M.defaults                = {
     top             = 0,
     left            = 0,
     hideOutOfCombat = false,
@@ -30,8 +32,9 @@ M.defaults       = {
             enabled = true,
         },
         runes      = {
-            enabled = true,
-            rotate  = true,
+            enabled       = true,
+            rotate        = true,
+            rotationSpeed = 9600,
         },
         background = {
             enabled        = true,
@@ -354,6 +357,31 @@ local function setBackgroundHideZeroStacks(hideZeroStacks)
     end
 end
 
+--- Get the rotation speed representation for the settings slider
+--- @return number
+local function getRotationSpeed()
+    local speed = M.settings.elements.runes.rotationSpeed
+    local inverted = rotationSpeedFactor - speed
+    local percent = inverted / rotationSpeedFactor
+
+    db:Trace(3, "Speed: <<1>>, Inverted: <<2>>, Percent: <<3>>", speed, inverted, percent)
+
+    return percent * 100
+end
+
+--- Set the rotation speed translated from the settings slider
+--- @param value number Speed slider value
+--- @return nil
+local function setRotationSpeed(value)
+    local percent = value / 100
+    local speed = rotationSpeedFactor - (rotationSpeedFactor * percent)
+    M.settings.elements.runes.rotationSpeed = speed
+
+    ui:RotateRunes(M.settings.elements.runes.rotate)
+
+    db:Trace(3, "Value: <<1>>, Speed: <<2>>", value, speed)
+end
+
 --- @type table Options for Style settings
 local styleOptions = {
     {
@@ -418,6 +446,30 @@ local styleOptions = {
         width = "half",
         disabled = function()
             return not getElementEnabled("runes")
+        end,
+    },
+    {
+        type = "custom",
+        width = "half",
+    },
+    {
+        -- Rotation Speed
+        type = "slider",
+        name = function()
+            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED")
+        end,
+        min = 5,
+        max = 95,
+        step = 5,
+        tooltip = function()
+            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED_DESC")
+        end,
+        getFunc = getRotationSpeed,
+        setFunc = setRotationSpeed,
+        width = "half",
+        default = M.defaults.elements.runes.rotationSpeed,
+        disabled = function()
+            return not getElementEnabled("runes") or not getElementRotate("runes")
         end,
     },
     {
