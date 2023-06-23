@@ -4,12 +4,18 @@ Count and show active Crux.
 
 [IMG]https://user-images.githubusercontent.com/4276170/239095176-200e8fcc-8fcf-45f6-ab76-24d5e52f8c39.gif[/IMG]
 
+[COLOR=Wheat][SIZE=5]Want More?[/SIZE][/COLOR]
+[I]Check out [URL="https://www.esoui.com/downloads/info3619-ExoYsCruxTracker.html"]ExoYs Crux Tracker[/URL] if you're looking for an addon with more in-depth Crux tracking and training features.[/I]
+
 [COLOR=Wheat][SIZE=5]Options & Features[/SIZE][/COLOR]
 [LIST]
 [*]Show count of active Crux
 [*]Play a sound when gaining, losing, or reaching maximum Crux
 [*]Animated or static miniature Crux display
-[*]Animated or static Arcanist-themed background
+[*]Animated or static Arcanist-themed background ring
+[LIST]
+[*]Option to show background ring only when Crux is active
+[/LIST]
 [*]Includes translations for:
 [LIST]
 [*]German (de)
