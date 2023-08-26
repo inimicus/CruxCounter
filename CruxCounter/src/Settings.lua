@@ -2,15 +2,9 @@
 -- Settings.lua
 -- -----------------------------------------------------------------------------
 
-local M                   = {}
 local CC                  = CruxCounter
 local LAM                 = LibAddonMenu2
-
-local addon
-local db
-local events
-local lang
-local ui
+local M                   = {}
 
 local gameSounds          = SOUNDS
 local sounds              = {}
@@ -66,7 +60,7 @@ M.defaults                = {
 --- @param left number Left position
 --- @return nil
 function M:SavePosition(top, left)
-    db:Trace(2, "Saving position <<1>> x <<2>>", top, left)
+    CC.Debug:Trace(2, "Saving position <<1>> x <<2>>", top, left)
     self.settings.top = top
     self.settings.left = left
 end
@@ -99,8 +93,8 @@ CruxCounter_MoveToCenterButton = nil
 --- Move the counter to the center of the screen
 --- @return nil
 local function moveToCenter()
-    ui:Unhide()
-    ui:MoveToCenter()
+    CruxCounter_Display:Unhide()
+    CruxCounter_Display:MoveToCenter()
     M:SavePosition(0, 0)
 end
 
@@ -109,7 +103,7 @@ end
 --- @return nil
 local function setLocked(isLocked)
     M.settings.locked = isLocked
-    ui:SetLocked(isLocked)
+    CruxCounter_Display:SetMovable(not isLocked)
 end
 
 --- Get the locked state of the counter
@@ -128,9 +122,9 @@ end
 --- @return string buttonText Translated Lock/Unlock text
 local function getLockUnlockButtonText()
     if getLocked() or getLockToReticle() then
-        return lang:GetString("SETTINGS_UNLOCK")
+        return CC.Language:GetString("SETTINGS_UNLOCK")
     else
-        return lang:GetString("SETTINGS_LOCK")
+        return CC.Language:GetString("SETTINGS_LOCK")
     end
 end
 
@@ -138,9 +132,9 @@ end
 --- @return string tooltipText Translated lock button tooltip or lock to reticle warning
 local function getLockUnlockTooltipText()
     if getLockToReticle() then
-        return lang:GetString("SETTINGS_LOCK_TO_RETICLE_WARNING")
+        return CC.Language:GetString("SETTINGS_LOCK_TO_RETICLE_WARNING")
     else
-        return lang:GetString("SETTINGS_LOCK_DESC")
+        return CC.Language:GetString("SETTINGS_LOCK_DESC")
     end
 end
 
@@ -148,9 +142,9 @@ end
 --- @return string tooltipText Translated move to center button tooltip or lock to reticle warning
 local function getMoveToCenterTooltipText()
     if getLockToReticle() then
-        return lang:GetString("SETTINGS_LOCK_TO_RETICLE_WARNING")
+        return CC.Language:GetString("SETTINGS_LOCK_TO_RETICLE_WARNING")
     else
-        return lang:GetString("SETTINGS_MOVE_TO_CENTER_DESC")
+        return CC.Language:GetString("SETTINGS_MOVE_TO_CENTER_DESC")
     end
 end
 
@@ -158,7 +152,6 @@ end
 --- @param control any Lock/Unlock button control
 --- @return nil
 local function toggleLocked(control)
-    ui:Unhide()
     setLocked(not getLocked())
     control:SetText(getLockUnlockButtonText())
 end
@@ -170,7 +163,7 @@ local function setLockToReticle(state)
     if state then
         moveToCenter()
     else
-        ui.SetPosition(M.settings.top, M.settings.left)
+        CruxCounter_Display:SetPosition(M.settings.top, M.settings.left)
     end
 
     setLocked(state)
@@ -191,11 +184,9 @@ end
 local function setHideOutOfCombat(hide)
     M.settings.hideOutOfCombat = hide
     if hide then
-        ui.Hide()
-        events:RegisterForCombat()
+        CC.Events:RegisterForCombat()
     else
-        events:UnregisterForCombat()
-        ui.Unhide()
+        CC.Events:UnregisterForCombat()
     end
 end
 
@@ -209,9 +200,8 @@ end
 --- @param value number
 --- @return nil
 local function setSize(value)
-    ui:Unhide()
     M.settings.size = value
-    ui:SetSize(value)
+    CruxCounter_Display:SetSize(value)
 end
 
 --- Get the counter display size
@@ -225,7 +215,7 @@ local displayOptions = {
     {
         -- Display
         type = "header",
-        name = function() return lang:GetString("SETTINGS_DISPLAY_HEADER") end,
+        name = function() return CC.Language:GetString("SETTINGS_DISPLAY_HEADER") end,
         width = "full",
     },
     {
@@ -241,7 +231,7 @@ local displayOptions = {
     {
         -- Move to Center
         type = "button",
-        name = function() return lang:GetString("SETTINGS_MOVE_TO_CENTER") end,
+        name = function() return CC.Language:GetString("SETTINGS_MOVE_TO_CENTER") end,
         tooltip = getMoveToCenterTooltipText,
         disabled = getLockToReticle,
         func = moveToCenter,
@@ -251,8 +241,8 @@ local displayOptions = {
     {
         -- Lock to Reticle
         type = "checkbox",
-        name = function() return lang:GetString("SETTINGS_LOCK_TO_RETICLE") end,
-        tooltip = function() return lang:GetString("SETTINGS_LOCK_TO_RETICLE_DESC") end,
+        name = function() return CC.Language:GetString("SETTINGS_LOCK_TO_RETICLE") end,
+        tooltip = function() return CC.Language:GetString("SETTINGS_LOCK_TO_RETICLE_DESC") end,
         getFunc = getLockToReticle,
         setFunc = setLockToReticle,
         width = "full",
@@ -260,8 +250,8 @@ local displayOptions = {
     {
         -- Hide out of Combat
         type = "checkbox",
-        name = function() return lang:GetString("SETTINGS_HIDE_OUT_OF_COMBAT") end,
-        tooltip = function() return lang:GetString("SETTINGS_HIDE_OUT_OF_COMBAT_DESC") end,
+        name = function() return CC.Language:GetString("SETTINGS_HIDE_OUT_OF_COMBAT") end,
+        tooltip = function() return CC.Language:GetString("SETTINGS_HIDE_OUT_OF_COMBAT_DESC") end,
         getFunc = getHideOutOfCombat,
         setFunc = setHideOutOfCombat,
         width = "full",
@@ -269,8 +259,8 @@ local displayOptions = {
     {
         -- Size
         type = "slider",
-        name = function() return lang:GetString("SETTINGS_SIZE") end,
-        tooltip = function() return lang:GetString("SETTINGS_SIZE_DESC") end,
+        name = function() return CC.Language:GetString("SETTINGS_SIZE") end,
+        tooltip = function() return CC.Language:GetString("SETTINGS_SIZE_DESC") end,
         min = 16,
         max = 512,
         step = 16,
@@ -291,15 +281,15 @@ local displayOptions = {
 --- @return nil
 local function setElementEnabled(element, enabled)
     if element == "background" then
-        ui:ShowBackground(enabled)
-        ui:RotateBackground(M.settings.elements.background.rotate)
+        CruxCounter_Display.ring:SetEnabled(enabled)
+        CruxCounter_Display.ring:SetRotationEnabled(M:GetElement("background").rotate)
     elseif element == "runes" then
-        ui:ShowRunes(enabled)
-        ui:RotateRunes(M.settings.elements.runes.rotate)
+        CruxCounter_Display.orbit:SetEnabled(enabled)
+        CruxCounter_Display.orbit:SetRotationEnabled(M:GetElement("runes").rotate)
     elseif element == "number" then
-        ui:ShowNumber(enabled)
+        CruxCounter_Display:SetNumberEnabled(enabled)
     else
-        db:Trace(0, "Invalid element '<<1>>' specified for element display setting", element)
+        CC.Debug:Trace(0, "Invalid element '<<1>>' specified for element display setting", element)
         return
     end
 
@@ -320,11 +310,11 @@ end
 --- @return nil
 local function setElementRotate(element, rotate)
     if element == "background" then
-        ui:RotateBackground(rotate)
+        CruxCounter_Display.ring:SetRotationEnabled(rotate)
     elseif element == "runes" then
-        ui:RotateRunes(rotate)
+        CruxCounter_Display.orbit:SetRotationEnabled(rotate)
     else
-        db:Trace(0, "Invalid element '<<1>>' specified for rotation setting", element)
+        CC.Debug:Trace(0, "Invalid element '<<1>>' specified for rotation setting", element)
         return
     end
 
@@ -349,12 +339,7 @@ end
 --- @return nil
 local function setBackgroundHideZeroStacks(hideZeroStacks)
     M.settings.elements.background.hideZeroStacks = hideZeroStacks
-
-    if hideZeroStacks then
-        ui:RefreshUI()
-    else
-        ui:ShowBackground(M.settings.elements.background.enabled)
-    end
+    CruxCounter_Display.ring:SetHideZeroStacks(hideZeroStacks)
 end
 
 --- Get the rotation speed representation for the settings slider
@@ -364,7 +349,7 @@ local function getRotationSpeed()
     local inverted = rotationSpeedFactor - speed
     local percent = inverted / rotationSpeedFactor
 
-    db:Trace(3, "Speed: <<1>>, Inverted: <<2>>, Percent: <<3>>", speed, inverted, percent)
+    CC.Debug:Trace(3, "Speed: <<1>>, Inverted: <<2>>, Percent: <<3>>", speed, inverted, percent)
 
     return percent * 100
 end
@@ -377,9 +362,9 @@ local function setRotationSpeed(value)
     local speed = rotationSpeedFactor - (rotationSpeedFactor * percent)
     M.settings.elements.runes.rotationSpeed = speed
 
-    ui:RotateRunes(M.settings.elements.runes.rotate)
+    CruxCounter_Display.orbit:SetRotationDuration(speed)
 
-    db:Trace(3, "Value: <<1>>, Speed: <<2>>", value, speed)
+    CC.Debug:Trace(3, "Value: <<1>>, Speed: <<2>>", value, speed)
 end
 
 --- @type table Options for Style settings
@@ -387,7 +372,7 @@ local styleOptions = {
     {
         type = "header",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_HEADER")
+            return CC.Language:GetString("SETTINGS_STYLE_HEADER")
         end,
         width = "full",
     },
@@ -395,10 +380,10 @@ local styleOptions = {
         -- Number
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_NUMBER")
+            return CC.Language:GetString("SETTINGS_STYLE_NUMBER")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_NUMBER_DESC")
+            return CC.Language:GetString("SETTINGS_STYLE_NUMBER_DESC")
         end,
         getFunc = function()
             return getElementEnabled("number")
@@ -415,10 +400,10 @@ local styleOptions = {
         -- Crux Runes
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES")
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_RUNES")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES_DESC")
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_RUNES_DESC")
         end,
         getFunc = function()
             return getElementEnabled("runes")
@@ -432,10 +417,10 @@ local styleOptions = {
         -- Rotate
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_ROTATE")
+            return CC.Language:GetString("SETTINGS_STYLE_ROTATE")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATE_DESC")
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATE_DESC")
         end,
         getFunc = function()
             return getElementRotate("runes")
@@ -456,13 +441,13 @@ local styleOptions = {
         -- Rotation Speed
         type = "slider",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED")
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED")
         end,
         min = 5,
         max = 95,
         step = 5,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED_DESC")
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_RUNES_ROTATION_SPEED_DESC")
         end,
         getFunc = getRotationSpeed,
         setFunc = setRotationSpeed,
@@ -479,10 +464,10 @@ local styleOptions = {
         -- Background
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_BACKGROUND")
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_BACKGROUND_DESC")
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_DESC")
         end,
         getFunc = function()
             return getElementEnabled("background")
@@ -496,10 +481,10 @@ local styleOptions = {
         -- Rotate
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_ROTATE")
+            return CC.Language:GetString("SETTINGS_STYLE_ROTATE")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_BACKGROUND_ROTATE")
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_ROTATE")
         end,
         getFunc = function()
             return getElementRotate("background")
@@ -516,10 +501,10 @@ local styleOptions = {
         -- Hide on Zero Stacks
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX")
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC")
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_HIDE_ZERO_CRUX_DESC")
         end,
         getFunc = getBackgroundHideZeroStacks,
         setFunc = setBackgroundHideZeroStacks,
@@ -545,8 +530,8 @@ end
 --- Get if a sound playback condition should play
 --- @param type string Name of the playback condition
 --- @return boolean enabled True when the condition should play a sound
-local function getSoundEnabled(type)
-    return M.settings.sounds[type].enabled
+function M:GetSoundEnabled(type)
+    return self.settings.sounds[type].enabled
 end
 
 --- Set the sound for a playback condition
@@ -585,7 +570,7 @@ local soundOptions = {
         -- Sounds
         type = "header",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_HEADER")
+            return CC.Language:GetString("SETTINGS_SOUNDS_HEADER")
         end,
         width = "full",
     },
@@ -593,13 +578,13 @@ local soundOptions = {
         -- Crux Gained
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_CRUX_GAINED")
+            return CC.Language:GetString("SETTINGS_SOUNDS_CRUX_GAINED")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_SOUNDS_CRUX_GAINED_DESC")
+            return CC.Language:GetString("SETTINGS_SOUNDS_CRUX_GAINED_DESC")
         end,
         getFunc = function()
-            return getSoundEnabled("cruxGained")
+            return M:GetSoundEnabled("cruxGained")
         end,
         setFunc = function(state)
             setSoundEnabled('cruxGained', state)
@@ -620,7 +605,7 @@ local soundOptions = {
         -- sort = "name-up",
         scrollable = true,
         disabled = function()
-            return not getSoundEnabled("cruxGained")
+            return not M:GetSoundEnabled("cruxGained")
         end,
     },
     {
@@ -638,20 +623,20 @@ local soundOptions = {
         width = "half",
         default = M.defaults.sounds.cruxGained.volume,
         disabled = function()
-            return not getSoundEnabled("cruxGained")
+            return not M:GetSoundEnabled("cruxGained")
         end,
     },
     {
         type = "button",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_PLAY")
+            return CC.Language:GetString("SETTINGS_SOUNDS_PLAY")
         end,
         func = function()
-            ui:PlaySoundForType("cruxGained")
+            CC.UI:PlaySoundForType("cruxGained")
         end,
         width = "full",
         disabled = function()
-            return not getSoundEnabled("cruxGained")
+            return not M:GetSoundEnabled("cruxGained")
         end,
     },
     {
@@ -661,13 +646,13 @@ local soundOptions = {
         -- Maximum Crux
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_MAXIMUM_CRUX")
+            return CC.Language:GetString("SETTINGS_SOUNDS_MAXIMUM_CRUX")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_SOUNDS_MAXIMUM_CRUX_DESC")
+            return CC.Language:GetString("SETTINGS_SOUNDS_MAXIMUM_CRUX_DESC")
         end,
         getFunc = function()
-            return getSoundEnabled("maxCrux")
+            return M:GetSoundEnabled("maxCrux")
         end,
         setFunc = function(state)
             setSoundEnabled("maxCrux", state)
@@ -688,7 +673,7 @@ local soundOptions = {
         -- sort = "name-up",
         scrollable = true,
         disabled = function()
-            return not getSoundEnabled("maxCrux")
+            return not M:GetSoundEnabled("maxCrux")
         end,
     },
     {
@@ -706,20 +691,20 @@ local soundOptions = {
         width = "half",
         default = M.defaults.sounds.maxCrux.volume,
         disabled = function()
-            return not getSoundEnabled("maxCrux")
+            return not M:GetSoundEnabled("maxCrux")
         end,
     },
     {
         type = "button",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_PLAY")
+            return CC.Language:GetString("SETTINGS_SOUNDS_PLAY")
         end,
         func = function()
-            ui:PlaySoundForType("maxCrux")
+            CC.UI:PlaySoundForType("maxCrux")
         end,
         width = "full",
         disabled = function()
-            return not getSoundEnabled("maxCrux")
+            return not M:GetSoundEnabled("maxCrux")
         end,
     },
     {
@@ -729,13 +714,13 @@ local soundOptions = {
         -- Crux Lost
         type = "checkbox",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_CRUX_LOST")
+            return CC.Language:GetString("SETTINGS_SOUNDS_CRUX_LOST")
         end,
         tooltip = function()
-            return lang:GetString("SETTINGS_SOUNDS_CRUX_LOST_DESC")
+            return CC.Language:GetString("SETTINGS_SOUNDS_CRUX_LOST_DESC")
         end,
         getFunc = function()
-            return getSoundEnabled("cruxLost")
+            return M:GetSoundEnabled("cruxLost")
         end,
         setFunc = function(state)
             setSoundEnabled("cruxLost", state)
@@ -756,7 +741,7 @@ local soundOptions = {
         -- sort = "name-up",
         scrollable = true,
         disabled = function()
-            return not getSoundEnabled("cruxLost")
+            return not M:GetSoundEnabled("cruxLost")
         end,
     },
     {
@@ -774,20 +759,20 @@ local soundOptions = {
         width = "half",
         default = M.defaults.sounds.cruxLost.volume,
         disabled = function()
-            return not getSoundEnabled("cruxLost")
+            return not M:GetSoundEnabled("cruxLost")
         end,
     },
     {
         type = "button",
         name = function()
-            return lang:GetString("SETTINGS_SOUNDS_PLAY")
+            return CC.Language:GetString("SETTINGS_SOUNDS_PLAY")
         end,
         func = function()
-            ui:PlaySoundForType("cruxLost")
+            CC.UI:PlaySoundForType("cruxLost")
         end,
         width = "full",
         disabled = function()
-            return not getSoundEnabled("cruxLost")
+            return not M:GetSoundEnabled("cruxLost")
         end,
     },
 }
@@ -814,19 +799,59 @@ local function populateSounds()
         end
     end
 
-    table.sort(gameSounds)
+    table.sort(sounds)
+end
+
+--- Get the default value for a key
+--- @param key string Default setting key
+--- @return any value Default setting value
+function M:GetDefault(key)
+    -- No key provided, return full defaults table
+    if key == nil then return self.defaults end
+
+    local value = self.defaults[key]
+
+    -- Error when invalid option requested
+    assert(value ~= nil, zo_strformat("Invalid setting '<<1>>' provided", key))
+
+    return value;
+end
+
+--- Get setting by key
+--- If no such key exists, get the default value
+--- @param key string|nil Setting key to lookup
+--- @return any|nil value Setting value or nil if the key doesn't exist
+function M:Get(key)
+    -- No key provided, return full settings table
+    if key == nil then return self.settings end
+
+    if self.settings[key] then
+        return self.settings[key]
+    end
+
+    -- Fall back to defaults if loaded setting is not found
+    return self:GetDefault(key)
+end
+
+--- Get setting by key
+--- If no such key exists, get the default value
+--- @param element string Element setting to get
+--- @return table elementSetting Settings for the element or
+function M:GetElement(element)
+    local elements = self:Get("elements")
+    local selection = elements[element] or nil
+
+    -- Bad and weird
+    assert(selection ~= nil,
+        zo_strformat("No loaded settings for element '<<1>>' found and no default settings exist", element))
+
+    return selection
 end
 
 --- Setup settings
 --- @return nil
 function M:Setup()
-    addon         = CC.Addon
-    db            = CC.Debug
-    events        = CC.Events
-    lang          = CC.Language
-    ui            = CC.UI
-    ui            = CC.UI
-
+    local addon   = CC.Addon
     self.settings = ZO_SavedVars:NewAccountWide(self.savedVariables, self.dbVersion, nil, self.defaults)
 
     populateSounds()
@@ -846,7 +871,7 @@ function M:Setup()
     })
     LAM:RegisterOptionControls(addon.name, optionsData)
 
-    db:Trace(2, "Finished InitSettings()")
+    CC.Debug:Trace(2, "Finished InitSettings()")
 end
 
 CC.Settings = M

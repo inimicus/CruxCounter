@@ -4,12 +4,11 @@
 
 local M     = {}
 local CC    = CruxCounter
-local db    = CC.Debug
-local ui    = CC.UI
-local s     = CC.Settings
 
---- @type integer Number of Crux stacks
+--- @type integer Current number of Crux stacks
 M.stacks    = 0
+
+--- @type integer Maximum number of stacks
 M.maxStacks = 3
 
 --- @type boolean True when the player is in combat
@@ -32,26 +31,27 @@ function M:SetStacks(count, playSound)
 
     -- Do nothing if stack count hasn't changed
     if count == previousStacks then
-        db:Trace(2, "Crux Unchanged: <<1>> -> <<2>>", previousStacks, count)
+        CC.Debug:Trace(2, "Crux Unchanged: <<1>> -> <<2>>", previousStacks, count)
         return
     end
 
-    ui.UpdateStacks(count)
+    CC.Debug:Trace(2, "Updating Crux: <<1>> -> <<2>>", previousStacks, count)
+    CruxCounter_Display:UpdateCount(count)
 
     local soundToPlay
     if count < previousStacks then
-        db:Trace(1, "Crux Lost: <<1>> -> <<2>>", previousStacks, count)
+        CC.Debug:Trace(1, "Crux Lost: <<1>> -> <<2>>", previousStacks, count)
         soundToPlay = "cruxLost"
     elseif count > previousStacks and count < self.maxStacks then
-        db:Trace(1, "Crux Gained: <<1>> -> <<2>>", previousStacks, count)
+        CC.Debug:Trace(1, "Crux Gained: <<1>> -> <<2>>", previousStacks, count)
         soundToPlay = "cruxGained"
     else
-        db:Trace(1, "Max Crux: <<1>> -> <<2>>", previousStacks, count)
+        CC.Debug:Trace(1, "Max Crux: <<1>> -> <<2>>", previousStacks, count)
         soundToPlay = "maxCrux"
     end
 
     if playSound then
-        ui:PlaySoundForType(soundToPlay)
+        CC.UI:PlaySoundForType(soundToPlay)
     end
 end
 
@@ -70,14 +70,6 @@ end
 --- @return nil
 function M:SetInCombat(inCombat)
     self.inCombat = inCombat
-
-    if not s.settings.hideOutOfCombat then return end
-
-    if inCombat then
-        ui:AddSceneFragments()
-    else
-        ui:RemoveSceneFragments()
-    end
 end
 
 CC.State = M

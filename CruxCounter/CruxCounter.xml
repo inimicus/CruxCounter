@@ -1,5 +1,5 @@
 <GuiXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://sir.insidi.at/or/schema/esoui.xsd">
+    xsi:noNamespaceSchemaLocation="https://in.imic.us/schema/esoui/101039/guixml.xsd">
     <Animations>
         <AnimationTimeline name="CruxCounter_RotateTextureCW" playbackType="LOOP"
             loopCount="LOOP_INDEFINITELY">
@@ -93,12 +93,19 @@
             </Controls>
         </Control>
         <TopLevelControl
-            name="CruxCounter_Aura"
+            name="CruxCounter_AuraControl"
             movable="true"
             mouseEnabled="true"
             hidden="true"
             clampedToScreen="false"
         >
+            <OnInitialized>
+                CruxCounter_Aura_OnInitialized(self)
+            </OnInitialized>
+            <OnMoveStop>
+                CruxCounter_Aura_OnMoveStop(self)
+            </OnMoveStop>
+
             <Dimensions x="128" y="128" />
             <Anchor
                 point="CENTER"
