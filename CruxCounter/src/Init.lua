@@ -2,32 +2,17 @@
 -- Init.lua
 -- -----------------------------------------------------------------------------
 
-local EM     = EVENT_MANAGER
 local CC     = CruxCounter
-
-local addon  = CC.Addon
-local events
-local lang
-local settings
-local ui
+local EM     = EVENT_MANAGER
 
 --- @type string Namespace for addon init event
-local initNs = addon.name .. "Init"
+local initNs = CC.Addon.name .. "_Init"
 
 --- Is the player's current class an Arcanist?
 --- @return boolean
 local function isArcanist()
     local arcanistClassId = 117
     return GetUnitClassId("player") == arcanistClassId
-end
-
---- Setup the addon
---- @return nil
-local function setup()
-    lang.Setup()
-    settings:Setup()
-    ui:Setup()
-    events:RegisterEvents()
 end
 
 --- Unregister the addon
@@ -49,16 +34,17 @@ local function init(_, addonName)
     end
 
     -- Skip addons that aren't this one
-    if addonName ~= addon.name then return end
-
-    events   = CC.Events
-    lang     = CC.Language
-    settings = CC.Settings
-    ui       = CC.UI
+    if addonName ~= CC.Addon.name then return end
 
     -- Ready to go
     unregister()
-    setup()
+
+    CC.Language:Setup()
+    CC.Settings:Setup()
+    CC.Events:RegisterEvents()
+
+    CruxCounter_Display:ApplySettings()
 end
 
+-- Make the magic happen
 EM:RegisterForEvent(initNs, EVENT_ADD_ON_LOADED, init)

@@ -2,17 +2,16 @@
 -- Language.lua
 -- -----------------------------------------------------------------------------
 
-local M = {}
 local CC = CruxCounter
-local translation = CC.Translation
+local M = {}
 
 M.translationPrefix = "CRUX_COUNTER_"
 
 --- Setup language
 --- @return nil
-function M.Setup()
+function M:Setup()
     -- Create translation globals
-    translation.Setup()
+    CC.Translation.Setup()
 end
 
 --- Wrapper for global GetString function

@@ -2,14 +2,9 @@
 -- Init.lua
 -- -----------------------------------------------------------------------------
 
-local M     = {}
 local EM    = EVENT_MANAGER
 local CC    = CruxCounter
-
-local addon
-local db
-local s
-local state
+local M     = {}
 
 --- @type integer Crux ability ID
 M.abilityId = 184220
@@ -18,7 +13,7 @@ M.abilityId = 184220
 --- @param event string Name of the event
 --- @return string namespace Addon-specific event namespace
 local function getEventNamespace(event)
-    return addon.name .. event
+    return CC.Addon.name .. event
 end
 
 --- Respond to effect changes.
@@ -28,31 +23,31 @@ end
 --- @return nil
 local function onEffectChanged(_, changeType, _, _, _, _, _, stackCount)
     if changeType == EFFECT_RESULT_FADED then
-        state:ClearStacks()
+        CC.State:ClearStacks()
         return
     end
 
-    state:SetStacks(stackCount)
+    CC.State:SetStacks(stackCount)
 end
 
 --- Update combat state
 --- @param inCombat boolean Whether or not the player is in combat
 --- @return nil
 local function onCombatChanged(_, inCombat)
-    state:SetInCombat(inCombat)
-end
+    CC.State:SetInCombat(inCombat)
 
---- Update combat state with current value
---- @return nil
-local function updateCombatState()
-    onCombatChanged(nil, IsUnitInCombat("player") --[[@as boolean]])
+    if CC.Settings:Get("hideOutOfCombat") and not inCombat then
+        CruxCounter_Display:RemoveSceneFragments()
+    else
+        CruxCounter_Display:AddSceneFragments()
+    end
 end
 
 --- Respond to player life/death/zone/load changes.
 --- Note: Sound playback skipped for these stack transitions
 --- @return nil
 local function onPlayerChanged()
-    updateCombatState()
+    M:UpdateCombatState()
 
     for i = 1, GetNumBuffs("player") do
         --- buffIndex wants luaindex so passing integer emits a warning
@@ -61,14 +56,20 @@ local function onPlayerChanged()
         if abilityId == M.abilityId then
             -- stackCount is seen as type `stackCount`, but should be `integer`
             -- fix in annotation
-            state:SetStacks(stackCount --[[@as integer]], false)
+            CC.State:SetStacks(stackCount --[[@as integer]], false)
 
             return
         end
     end
 
     -- No Crux in player buffs
-    state:SetStacks(0, false)
+    CC.State:SetStacks(0, false)
+end
+
+--- Update combat state with current value
+--- @return nil
+function M:UpdateCombatState()
+    onCombatChanged(nil, IsUnitInCombat("player") --[[@as boolean]])
 end
 
 --- Wrap EVENT_MANAGER:RegisterForEvent function
@@ -78,6 +79,14 @@ end
 --- @return nil
 function M:Listen(namespace, event, callbackFunc)
     EM:RegisterForEvent(getEventNamespace(namespace), event, callbackFunc)
+end
+
+--- Wrap EVENT_MANAGER:UnregisterForEvent function
+--- @param namespace string Unique event namespace
+--- @param event any Event to filter
+--- @return nil
+function M:Unlisten(namespace, event)
+    EM:RegisterForEvent(getEventNamespace(namespace), event)
 end
 
 --- Wrap EVENT_MANAGER:AddFilterForEvent function
@@ -94,26 +103,21 @@ end
 --- Register to receive combat state transitions
 --- @return nil
 function M:RegisterForCombat()
-    updateCombatState()
-
+    self:UpdateCombatState()
     self:Listen("CombatState", EVENT_PLAYER_COMBAT_STATE, onCombatChanged)
 end
 
 --- Unregister listening for combat state transitions
 --- @return nil
 function M:UnregisterForCombat()
-    EM:UnregisterForEvent(getEventNamespace("CombatState"), EVENT_PLAYER_COMBAT_STATE)
+    self:Unlisten("CombatState", EVENT_PLAYER_COMBAT_STATE)
+    self:UpdateCombatState()
 end
 
 --- Registers event manager events.
 --- @return nil
 function M:RegisterEvents()
-    addon = CC.Addon
-    db    = CC.Debug
-    s     = CC.Settings
-    state = CC.State
-
-    db:Trace(2, "Registering events...")
+    CC.Debug:Trace(2, "Registering events...")
 
     -- Ability updates
     self:Listen("EffectChanged", EVENT_EFFECT_CHANGED, onEffectChanged)
@@ -133,7 +137,7 @@ function M:RegisterEvents()
     self:Listen("ZoneUpdated", EVENT_ZONE_UPDATE, onPlayerChanged)
 
     -- Combat state
-    if s.settings.hideOutOfCombat then
+    if CC.Settings:Get("hideOutOfCombat") then
         self:RegisterForCombat()
     end
 end
