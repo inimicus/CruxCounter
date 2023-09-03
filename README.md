@@ -8,8 +8,10 @@ Count and show active Crux.
 
 - Show count of active Crux
 - Play a sound when gaining, losing, or reaching maximum Crux
-- Animated or static miniature Crux display
-- Animated or static Arcanist-themed background
+- Animated miniature Crux display
+  - Option to change the rotation speed or completely disable rotation
+- Animated Arcanist-themed background
+  - Option to disable the background rotation
   - Option to show background ring only when Crux is active
 - Includes translations for:
   - German (de)
