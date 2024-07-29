@@ -23,6 +23,8 @@ function CruxCounter_Rune:Initialize(control, num)
         timeline = AM:CreateTimelineFromVirtual("CruxCounter_CruxSmokeDontBreatheThis",
             self.control:GetNamedChild("Smoke")),
     }
+    self.glow = self.control:GetNamedChild("Glow")
+    self.rune = self.control:GetNamedChild("Rune")
 
     self:SetRotation2D(self.startingRotation)
 
@@ -59,6 +61,15 @@ function CruxCounter_Rune:Initialize(control, num)
     control.OnShow = function()
         self.smoke.timeline:PlayFromStart()
     end
+end
+
+--- Set the color of the Rune elements
+--- @param color ZO_ColorDef
+--- @return nil
+function CruxCounter_Rune:SetColor(color)
+    self.rune:SetColor(color:UnpackRGBA())
+    self.glow:SetColor(color:UnpackRGBA())
+    self.smoke.control:SetColor(color:UnpackRGBA())
 end
 
 --- Play the Rune rotation animation

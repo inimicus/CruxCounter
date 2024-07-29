@@ -35,6 +35,7 @@ function CruxCounter_Ring:ApplySettings()
     self:SetEnabled(ring.enabled)
     self:SetRotationEnabled(ring.rotate)
     self:SetHideZeroStacks(ring.hideZeroStacks)
+    self:SetColor(ZO_ColorDef:New(ring.color))
 end
 
 --- Start the Ring rotation animation
@@ -78,6 +79,13 @@ function CruxCounter_Ring:SetEnabled(enabled)
     self.enabled = enabled
     self.control:SetHidden(not enabled)
     self:UpdateRotation()
+end
+
+--- Set the Ring background color
+--- @param color ZO_ColorDef
+--- @return nil
+function CruxCounter_Ring:SetColor(color)
+    self.control:SetColor(color:UnpackRGBA())
 end
 
 --- Set whether or not the Ring background animation is enabled

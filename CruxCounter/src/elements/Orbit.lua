@@ -48,6 +48,7 @@ function CruxCounter_Orbit:ApplySettings()
     self:SetEnabled(runes.enabled)
     self:SetRotationEnabled(runes.rotate)
     self:SetRotationDuration(runes.rotationSpeed)
+    self:SetColor(ZO_ColorDef:New(runes.color))
 end
 
 --- Set whether or not the Orbit is enabled
@@ -56,6 +57,15 @@ end
 function CruxCounter_Orbit:SetEnabled(enabled)
     self.enabled = enabled
     self:SetHidden(not enabled)
+end
+
+--- Set the Orbit color
+--- @param color ZO_ColorDef
+--- @return nil
+function CruxCounter_Orbit:SetColor(color)
+    self:ForRunes(function (_, rune)
+        rune:SetColor(color)
+    end)
 end
 
 --- Set whether or not rotation is enabled

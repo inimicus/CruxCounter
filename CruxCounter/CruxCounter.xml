@@ -56,7 +56,6 @@
             textureFile="/art/fx/texture/arcanist_trianglerune_01.dds"
             inheritScale="true"
             inheritAlpha="true"
-            color="B7FF7C"
             blendMode="ALPHA"
         >
             <Dimensions x="32" y="32" />
@@ -69,7 +68,6 @@
                     textureFile="/art/fx/texture/lensflares_02_2x2.dds"
                     inheritScale="true"
                     inheritAlpha="true"
-                    color="B7FF7C"
                     blendMode="ALPHA"
                 >
                     <Dimensions x="64" y="64" />
@@ -81,7 +79,6 @@
                     textureFile="/art/fx/texture/smoke_billowy_6x6.dds"
                     inheritScale="true"
                     inheritAlpha="true"
-                    color="B7FF7C"
                     blendMode="ALPHA"
                 >
                     <Dimensions x="64" y="64" />
@@ -143,7 +140,6 @@
                     textureFile="/art/fx/texture/arcanist_tank4_runicglowlines.dds"
                     inheritScale="true"
                     inheritAlpha="true"
-                    color="ADF573"
                     blendMode="ALPHA"
                 >
                     <Dimensions x="128" y="128" />
@@ -158,7 +154,6 @@
                     inheritAlpha="true"
                     horizontalAlignment="CENTER"
                     verticalAlignment="CENTER"
-                    color="B7FFC6"
                     text="0"
                 >
                     <Dimensions x="64" y="64" />
