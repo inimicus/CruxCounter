@@ -34,6 +34,13 @@ function CruxCounter_Aura:SetNumberEnabled(enabled)
     self.count:SetHidden(not enabled)
 end
 
+--- Set the color of the Number element
+--- @param color ZO_ColorDef
+--- @return nil
+function CruxCounter_Aura:SetNumberColor(color)
+    self.count:SetColor(color:UnpackRGBA())
+end
+
 --- Apply settings to the Aura
 --- @return nil
 function CruxCounter_Aura:ApplySettings()
@@ -48,7 +55,9 @@ function CruxCounter_Aura:ApplySettings()
     CC.Events:UpdateCombatState()
 
     -- Other control settings
-    self:SetNumberEnabled(CC.Settings:GetElement("number").enabled)
+    local number = CC.Settings:GetElement("number")
+    self:SetNumberEnabled(number.enabled)
+    self:SetNumberColor(ZO_ColorDef:New(number.color))
     self.ring:ApplySettings()
     self.orbit:ApplySettings()
 end

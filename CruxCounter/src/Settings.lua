@@ -11,10 +11,19 @@ local sounds              = {}
 
 local rotationSpeedFactor = 24000
 
-M.settings                = {}
-M.dbVersion               = 0
-M.savedVariables          = "CruxCounterData"
-M.defaults                = {
+-- Colors
+-- B7FFC6
+local veryLightGreen      = ZO_ColorDef:New(0.7176470588, 1, 0.7764705882, 1)
+-- B7FF7C
+local lightGreen          = ZO_ColorDef:New(0.7176470588, 1, 0.4862745098, 1)
+-- ADF573
+local mediumGreen         = ZO_ColorDef:New(0.6784313725, 0.9607843137, 0.4509803921, 1)
+
+
+M.settings       = {}
+M.dbVersion      = 0
+M.savedVariables = "CruxCounterData"
+M.defaults       = {
     top             = 0,
     left            = 0,
     hideOutOfCombat = false,
@@ -24,16 +33,19 @@ M.defaults                = {
     elements        = {
         number     = {
             enabled = true,
+            color   = veryLightGreen,
         },
         runes      = {
             enabled       = true,
             rotate        = true,
             rotationSpeed = 9600,
+            color         = lightGreen,
         },
         background = {
             enabled        = true,
             rotate         = true,
             hideZeroStacks = false,
+            color          = mediumGreen,
         },
     },
     sounds          = {
@@ -328,6 +340,65 @@ local function getElementRotate(element)
     return M.settings.elements[element].rotate
 end
 
+--- Set the color of an element
+--- @param element string Name of the element
+--- @param color ZO_ColorDef
+--- @return nil
+local function setElementColor(element, color)
+    local r, g, b, a = color:UnpackRGBA()
+
+    if element == "background" then
+        CruxCounter_Display.ring:SetColor(color)
+    elseif element == "runes" then
+        CruxCounter_Display.orbit:SetColor(color)
+    elseif element == "number" then
+        CruxCounter_Display:SetNumberColor(color)
+    else
+        CC.Debug:Trace(0, "Invalid element '<<1>>' specified for color setting", element)
+        return
+    end
+
+    M.settings.elements[element].color = {
+        r = r,
+        g = g,
+        b = b,
+        a = a,
+    }
+end
+
+--- Get the color of an element
+--- @param element string Name of the element
+--- @return ZO_ColorDef
+local function getElementColor(element)
+    return ZO_ColorDef:New(M.settings.elements[element].color)
+end
+
+--- Get the default color for an element
+--- @param element string Name of the element
+--- @return ZO_ColorDef
+local function getDefaultColor(element)
+    return M.defaults.elements[element].color
+end
+
+--- Get if the element is already set to the default color or disabled
+--- @param element string Name of the element
+--- @return boolean
+local function isElementDefaultColorOrDisabled(element)
+    -- Disabled
+    if not getElementEnabled(element) then
+        return true
+    end
+
+    return getElementColor(element):IsEqual(getDefaultColor(element))
+end
+
+--- Reset an element to its default color
+--- @param element string Name of the element
+--- @return nil
+local function setToDefaultColor(element)
+    setElementColor(element, getDefaultColor(element))
+end
+
 --- Get the Hide for No Crux setting
 --- @return boolean hideZeroStacks True to hide when there are zero stacks
 local function getBackgroundHideZeroStacks()
@@ -394,6 +465,57 @@ local styleOptions = {
         width = "half",
     },
     {
+        type = "custom",
+        width = "half",
+    },
+    {
+        -- Number Color
+        type = "colorpicker",
+        name = function()
+            -- TODO: Translations
+            return 'Color'
+        end,
+        tooltip = function()
+            -- TODO: Translations
+            return 'Le color'
+        end,
+        getFunc = function()
+            local color = getElementColor("number")
+            return color:UnpackRGBA()
+        end,
+        setFunc = function(r, g, b, a)
+            local newColor = ZO_ColorDef:New(r, g, b, a)
+            if newColor then
+                setElementColor("number", newColor)
+            end
+        end,
+        default = getDefaultColor("number"),
+        disabled = function()
+            return not getElementEnabled("number")
+        end,
+        width = "half",
+    },
+    {
+        type = "custom",
+        width = "half",
+    },
+    {
+        type = "button",
+        name = function()
+            -- TODO: Translations
+            return 'Reset Color'
+        end,
+        tooltip = function ()
+            -- TODO: Translations
+            return "Reset to default color"
+        end,
+        func = function()
+            setToDefaultColor("number")
+        end,
+        width = "half",
+        disabled = function() return isElementDefaultColorOrDisabled("number") end,
+    },
+    {
         type = "divider",
     },
     {
@@ -434,7 +556,30 @@ local styleOptions = {
         end,
     },
     {
-        type = "custom",
+        -- Crux Color
+        type = "colorpicker",
+        name = function()
+            -- TODO: Translations
+            return 'Color'
+        end,
+        tooltip = function()
+            -- TODO: Translations
+            return 'Le color'
+        end,
+        getFunc = function()
+            local color = getElementColor("runes")
+            return color:UnpackRGBA()
+        end,
+        setFunc = function(r, g, b, a)
+            local newColor = ZO_ColorDef:New(r, g, b, a)
+            if newColor then
+                setElementColor("runes", newColor)
+            end
+        end,
+        default = getDefaultColor("runes"),
+        disabled = function()
+            return not getElementEnabled("runes")
+        end,
         width = "half",
     },
     {
@@ -456,6 +601,22 @@ local styleOptions = {
         disabled = function()
             return not getElementEnabled("runes") or not getElementRotate("runes")
         end,
+    },
+    {
+        type = "button",
+        name = function()
+            -- TODO: Translations
+            return "Reset Color"
+        end,
+        tooltip = function ()
+            -- TODO: Translations
+            return "Reset to default color"
+        end,
+        func = function()
+            setToDefaultColor("runes")
+        end,
+        width = "half",
+        disabled = function() return isElementDefaultColorOrDisabled("runes") end,
     },
     {
         type = "divider",
@@ -498,6 +659,33 @@ local styleOptions = {
         end,
     },
     {
+        -- Background Color
+        type = "colorpicker",
+        name = function()
+            -- TODO: Translations
+            return 'Color'
+        end,
+        tooltip = function()
+            -- TODO: Translations
+            return 'Le color'
+        end,
+        getFunc = function()
+            local color = getElementColor("background")
+            return color:UnpackRGBA()
+        end,
+        setFunc = function(r, g, b, a)
+            local newColor = ZO_ColorDef:New(r, g, b, a)
+            if newColor then
+                setElementColor("background", newColor)
+            end
+        end,
+        default = getDefaultColor("background"),
+        disabled = function()
+            return not getElementEnabled("background")
+        end,
+        width = "half",
+    },
+    {
         -- Hide on Zero Stacks
         type = "checkbox",
         name = function()
@@ -512,6 +700,22 @@ local styleOptions = {
         disabled = function()
             return not getElementEnabled("background")
         end,
+    },
+    {
+        type = "button",
+        name = function()
+            -- TODO: Translations
+            return "Reset Color"
+        end,
+        tooltip = function ()
+            -- TODO: Translations
+            return "Reset to default color"
+        end,
+        func = function()
+            setToDefaultColor("background")
+        end,
+        width = "half",
+        disabled = function() return isElementDefaultColorOrDisabled("background") end,
     },
 }
 
