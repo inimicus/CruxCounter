@@ -148,6 +148,7 @@
                 >
                     <Dimensions x="128" y="128" />
                     <Anchor point="CENTER" relativeTo="$(parent)" offsetX="0" offsetY="0" />
+                    <TextureCoords left="0.0" right="1.0" top="0.0" bottom="1.03" />
                 </Texture>
 
                 <Label
