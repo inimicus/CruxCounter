@@ -63,7 +63,7 @@ end
 --- @param color ZO_ColorDef
 --- @return nil
 function CruxCounter_Orbit:SetColor(color)
-    self:ForRunes(function (_, rune)
+    self:ForRunes(function(_, rune)
         rune:SetColor(color)
     end)
 end

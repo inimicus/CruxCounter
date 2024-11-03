@@ -27,7 +27,6 @@ Counter:
 
 <img src="https://user-images.githubusercontent.com/4276170/239095178-ca3e4ac4-d1b9-4e81-b77f-3da45471a6f1.png" alt="Counter Style">
 
-
 Display options:
 
 <img src="https://user-images.githubusercontent.com/4276170/239095174-ad77b3f5-e662-4279-af8e-05b3536876e4.png" alt="Display Options">
