@@ -86,7 +86,7 @@ end
 --- @param event any Event to filter
 --- @return nil
 function M:Unlisten(namespace, event)
-    EM:RegisterForEvent(getEventNamespace(namespace), event)
+    EM:UnregisterForEvent(getEventNamespace(namespace), event)
 end
 
 --- Wrap EVENT_MANAGER:AddFilterForEvent function
