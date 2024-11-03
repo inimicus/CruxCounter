@@ -781,7 +781,7 @@ local soundOptions = {
             return M:GetSoundEnabled("cruxGained")
         end,
         setFunc = function(state)
-            setSoundEnabled('cruxGained', state)
+            setSoundEnabled("cruxGained", state)
         end,
         width = "full",
     },
