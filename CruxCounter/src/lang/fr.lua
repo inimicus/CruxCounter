@@ -70,7 +70,7 @@ function M.Setup()
         "Masquer l'arrière-plan lorsqu'il n'y a pas d'Interprétation active.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR", "Couleur")
-    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUNDOLOR_DESC", "Couleur de la texture de fond du compteur.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_DESC", "Couleur de la texture de fond du compteur.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_RESET", "Réinitialiser la Couleur")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_RESET_DESC",
         "Réinitialiser la couleur de la texture de fond du compteur par défaut.")

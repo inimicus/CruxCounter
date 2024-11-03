@@ -69,7 +69,7 @@ function M.Setup()
         "Versteckt den Hintergrund, wenn keine Crux aktiv sind.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR", "Farbe")
-    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUNDOLOR_DESC", "Farbe der Hintergrundtextur des Zählers.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_DESC", "Farbe der Hintergrundtextur des Zählers.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_RESET", "Farbe zurücksetzen")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_RESET_DESC",
         "Hintergrundtexturfarbe des Zählers auf die Standardfarbe zurücksetzen.")

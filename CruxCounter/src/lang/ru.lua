@@ -66,7 +66,7 @@ function M.Setup()
         "Скрывать фон, когда нет активных Круксов.")
 
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR", "Цвет")
-    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUNDOLOR_DESC", "Цвет текстуры фона счетчика.")
+    ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_DESC", "Цвет текстуры фона счетчика.")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_RESET", "Сбросить Цвет")
     ZO_CreateStringId("CRUX_COUNTER_SETTINGS_STYLE_BACKGROUND_COLOR_RESET_DESC",
         "Сбросить цвет текстуры фона счетчика на стандартный.")
