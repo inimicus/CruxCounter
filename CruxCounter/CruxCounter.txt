@@ -1,5 +1,5 @@
 ## Title: Crux Counter
-## APIVersion: 101038 101039
+## APIVersion: 101044 101045
 ## SavedVariables: CruxCounterData
 ## Description: Got Crux?
 ## Version: 1.2.0
