@@ -8,6 +8,7 @@ Count and show active Crux.
 
 - Show count of active Crux
 - Play a sound when gaining, losing, or reaching maximum Crux
+- Change the colors to match your UI style or visibility requirements
 - Animated miniature Crux display
   - Option to change the rotation speed or completely disable rotation
 - Animated Arcanist-themed background
