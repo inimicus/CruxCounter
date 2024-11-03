@@ -2,7 +2,7 @@
 ## APIVersion: 101044 101045
 ## SavedVariables: CruxCounterData
 ## Description: Got Crux?
-## Version: 1.2.0
+## Version: 1.3.0
 ## AddOnVersion: 010200
 ## Author: |cFFCCCC@g4rr3t|r (NA)
 ## DependsOn: LibAddonMenu-2.0>=28
