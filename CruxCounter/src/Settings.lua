@@ -20,6 +20,8 @@ local lightGreen          = ZO_ColorDef:New(0.7176470588, 1, 0.4862745098, 1)
 local mediumGreen         = ZO_ColorDef:New(0.6784313725, 0.9607843137, 0.4509803921, 1)
 
 
+-- Defaults/Settings Storage
+
 M.settings       = {}
 M.dbVersion      = 0
 M.savedVariables = "CruxCounterData"
@@ -472,12 +474,10 @@ local styleOptions = {
         -- Number Color
         type = "colorpicker",
         name = function()
-            -- TODO: Translations
-            return 'Color'
+            return CC.Language:GetString("SETTINGS_STYLE_NUMBER_COLOR")
         end,
         tooltip = function()
-            -- TODO: Translations
-            return 'Le color'
+            return CC.Language:GetString("SETTINGS_STYLE_NUMBER_COLOR_DESC")
         end,
         getFunc = function()
             local color = getElementColor("number")
@@ -502,12 +502,10 @@ local styleOptions = {
     {
         type = "button",
         name = function()
-            -- TODO: Translations
-            return 'Reset Color'
+            return CC.Language:GetString("SETTINGS_STYLE_NUMBER_COLOR_RESET")
         end,
-        tooltip = function ()
-            -- TODO: Translations
-            return "Reset to default color"
+        tooltip = function()
+            return CC.Language:GetString("SETTINGS_STYLE_NUMBER_COLOR_RESET_DESC")
         end,
         func = function()
             setToDefaultColor("number")
@@ -559,12 +557,10 @@ local styleOptions = {
         -- Crux Color
         type = "colorpicker",
         name = function()
-            -- TODO: Translations
-            return 'Color'
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_COLOR")
         end,
         tooltip = function()
-            -- TODO: Translations
-            return 'Le color'
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_COLOR_DESC")
         end,
         getFunc = function()
             local color = getElementColor("runes")
@@ -605,12 +601,10 @@ local styleOptions = {
     {
         type = "button",
         name = function()
-            -- TODO: Translations
-            return "Reset Color"
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_COLOR_RESET")
         end,
-        tooltip = function ()
-            -- TODO: Translations
-            return "Reset to default color"
+        tooltip = function()
+            return CC.Language:GetString("SETTINGS_STYLE_CRUX_COLOR_RESET_DESC")
         end,
         func = function()
             setToDefaultColor("runes")
@@ -662,12 +656,10 @@ local styleOptions = {
         -- Background Color
         type = "colorpicker",
         name = function()
-            -- TODO: Translations
-            return 'Color'
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_COLOR")
         end,
         tooltip = function()
-            -- TODO: Translations
-            return 'Le color'
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_COLOR_DESC")
         end,
         getFunc = function()
             local color = getElementColor("background")
@@ -704,12 +696,10 @@ local styleOptions = {
     {
         type = "button",
         name = function()
-            -- TODO: Translations
-            return "Reset Color"
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_COLOR_RESET")
         end,
-        tooltip = function ()
-            -- TODO: Translations
-            return "Reset to default color"
+        tooltip = function()
+            return CC.Language:GetString("SETTINGS_STYLE_BACKGROUND_COLOR_RESET_DESC")
         end,
         func = function()
             setToDefaultColor("background")
